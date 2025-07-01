@@ -10,7 +10,8 @@ Este laboratorio tiene como objetivo el desarrollo de un formulario web que perm
 - CSS3 (diseño responsive)
 - JavaScript (validaciones con RegEx)
 ---
-![Uploading image.png…]()
+
+![Uploading Captura de pantalla 2025-07-01 114623.png…]()
 
 ---
 
