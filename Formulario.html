@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Registro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+            font-size: 14px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .error {
+            border-color: #e74c3c !important;
+            background: #fdf2f2 !important;
+        }
+
+        .success {
+            border-color: #27ae60 !important;
+            background: #f2fbf4 !important;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .success-message {
+            color: #27ae60;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .required {
+            color: #e74c3c;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Formulario de Registro</h1>
+        <form id="registroForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="nombre">Nombre <span class="required">*</span></label>
+                    <input type="text" id="nombre" name="nombre" required>
+                    <div class="error-message" id="nombreError"></div>
+                    <div class="success-message" id="nombreSuccess">✓ Válido</div>
+                </div>
+                <div class="form-group">
+                    <label for="apellido">Apellido <span class="required">*</span></label>
+                    <input type="text" id="apellido" name="apellido" required>
+                    <div class="error-message" id="apellidoError"></div>
+                    <div class="success-message" id="apellidoSuccess">✓ Válido</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="cedula">Cédula/RUC <span class="required">*</span></label>
+                <input type="text" id="cedula" name="cedula" required>
+                <div class="error-message" id="cedulaError"></div>
+                <div class="success-message" id="cedulaSuccess">✓ Válido</div>
+            </div>
+
+            <div class="form-group">
+                <label for="telefono">Teléfono <span class="required">*</span></label>
+                <input type="text" id="telefono" name="telefono" required>
+                <div class="error-message" id="telefonoError"></div>
+                <div class="success-message" id="telefonoSuccess">✓ Válido</div>
+            </div>
+
+            <div class="form-group">
+                <label for="fechaNacimiento">Fecha de Nacimiento <span class="required">*</span></label>
+                <input type="date" id="fechaNacimiento" name="fechaNacimiento" required>
+                <div class="error-message" id="fechaNacimientoError"></div>
+                <div class="success-message" id="fechaNacimientoSuccess">✓ Válido</div>
+            </div>
+
+            <div class="form-group">
+                <label for="genero">Género <span class="required">*</span></label>
+                <select id="genero" name="genero" required>
+                    <option value="">Seleccione una opción</option>
+                    <option value="masculino">Masculino</option>
+                    <option value="femenino">Femenino</option>
+                    <option value="otro">Otro</option>
+                </select>
+                <div class="error-message" id="generoError"></div>
+                <div class="success-message" id="generoSuccess">✓ Válido</div>
+            </div>
+
+            <div class="form-group">
+                <label for="direccion">Dirección <span class="required">*</span></label>
+                <input type="text" id="direccion" name="direccion" required maxlength="20">
+                <div class="error-message" id="direccionError"></div>
+                <div class="success-message" id="direccionSuccess">✓ Válido</div>
+            </div>
+
+            <div class="form-group">
+                <label for="salario">Salario <span class="required">*</span></label>
+                <input type="number" id="salario" name="salario" min="470" max="5000" step="0.01" required>
+                <div class="error-message" id="salarioError"></div>
+                <div class="success-message" id="salarioSuccess">✓ Válido</div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email <span class="required">*</span></label>
+                <input type="email" id="email" name="email" required>
+                <div class="error-message" id="emailError"></div>
+                <div class="success-message" id="emailSuccess">✓ Válido</div>
+            </div>
+
+            <div class="form-group">
+                <label for="sitioWeb">Sitio Web <span class="required">*</span></label>
+                <input type="url" id="sitioWeb" name="sitioWeb" required>
+                <div class="error-message" id="sitioWebError"></div>
+                <div class="success-message" id="sitioWebSuccess">✓ Válido</div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Contraseña <span class="required">*</span></label>
+                <input type="password" id="password" name="password" required>
+                <div class="error-message" id="passwordError"></div>
+                <div class="success-message" id="passwordSuccess">✓ Válido</div>
+            </div>
+
+            <button type="submit" class="btn">Registrar</button>
+        </form>
+    </div>
+
+    <script>
+        // Expresiones regulares
+        const regexNombre = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{3,30}$/;
+        const regexCedula = /^\d{10}$/;
+        const regexRuc = /^\d{13}$/;
+        const regexTelefono = /^\d{10}$/;
+        const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const regexUrl = /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/;
+        const regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,12}$/;
+        const regexDireccion = /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s,.-]{1,20}$/;
+
+        // Función para mostrar error
+        function mostrarError(campo, mensaje) {
+            const input = document.getElementById(campo);
+            const errorElement = document.getElementById(campo + 'Error');
+            const successElement = document.getElementById(campo + 'Success');
+            
+            input.classList.add('error');
+            input.classList.remove('success');
+            errorElement.textContent = mensaje;
+            errorElement.style.display = 'block';
+            successElement.style.display = 'none';
+        }
+
+        // Función para mostrar éxito
+        function mostrarExito(campo) {
+            const input = document.getElementById(campo);
+            const errorElement = document.getElementById(campo + 'Error');
+            const successElement = document.getElementById(campo + 'Success');
+            
+            input.classList.add('success');
+            input.classList.remove('error');
+            errorElement.style.display = 'none';
+            successElement.style.display = 'block';
+        }
+
+        // Función para limpiar validación
+        function limpiarValidacion(campo) {
+            const input = document.getElementById(campo);
+            const errorElement = document.getElementById(campo + 'Error');
+            const successElement = document.getElementById(campo + 'Success');
+            
+            input.classList.remove('error', 'success');
+            errorElement.style.display = 'none';
+            successElement.style.display = 'none';
+        }
+
+        // Validaciones individuales
+        function validarNombre(campo) {
+            const valor = document.getElementById(campo).value.trim();
+            
+            if (!valor) {
+                mostrarError(campo, 'Este campo es requerido');
+                return false;
+            }
+            
+            if (!regexNombre.test(valor)) {
+                mostrarError(campo, 'Debe contener solo letras, entre 3 y 30 caracteres');
+                return false;
+            }
+            
+            mostrarExito(campo);
+            return true;
+        }
+
+        function validarCedula() {
+            const valor = document.getElementById('cedula').value.trim();
+            
+            if (!valor) {
+                mostrarError('cedula', 'Este campo es requerido');
+                return false;
+            }
+            
+            if (!regexCedula.test(valor) && !regexRuc.test(valor)) {
+                mostrarError('cedula', 'Debe contener 10 dígitos (cédula) o 13 dígitos (RUC)');
+                return false;
+            }
+            
+            mostrarExito('cedula');
+            return true;
+        }
+
+        function validarTelefono() {
+            const valor = document.getElementById('telefono').value.trim();
+            
+            if (!valor) {
+                mostrarError('telefono', 'Este campo es requerido');
+                return false;
+            }
+            
+            if (!regexTelefono.test(valor)) {
+                mostrarError('telefono', 'Debe contener exactamente 10 dígitos');
+                return false;
+            }
+            
+            mostrarExito('telefono');
+            return true;
+        }
+
+        function validarFechaNacimiento() {
+            const valor = document.getElementById('fechaNacimiento').value;
+            
+            if (!valor) {
+                mostrarError('fechaNacimiento', 'Este campo es requerido');
+                return false;
+            }
+            
+            const fecha = new Date(valor);
+            const fechaMinima = new Date('1900-01-01');
+            const fechaMaxima = new Date();
+            
+            if (fecha < fechaMinima || fecha > fechaMaxima) {
+                mostrarError('fechaNacimiento', 'La fecha debe estar entre 01/01/1900 y hoy');
+                return false;
+            }
+            
+            mostrarExito('fechaNacimiento');
+            return true;
+        }
+
+        function validarGenero() {
+            const valor = document.getElementById('genero').value;
+            
+            if (!valor) {
+                mostrarError('genero', 'Debe seleccionar una opción');
+                return false;
+            }
+            
+            mostrarExito('genero');
+            return true;
+        }
+
+        function validarDireccion() {
+            const valor = document.getElementById('direccion').value.trim();
+            
+            if (!valor) {
+                mostrarError('direccion', 'Este campo es requerido');
+                return false;
+            }
+            
+            if (!regexDireccion.test(valor)) {
+                mostrarError('direccion', 'Máximo 20 caracteres, sin caracteres especiales peligrosos');
+                return false;
+            }
+            
+            mostrarExito('direccion');
+            return true;
+        }
+
+        function validarSalario() {
+            const valor = parseFloat(document.getElementById('salario').value);
+            
+            if (isNaN(valor)) {
+                mostrarError('salario', 'Este campo es requerido');
+                return false;
+            }
+            
+            if (valor < 470 || valor > 5000) {
+                mostrarError('salario', 'El salario debe estar entre $470 y $5000');
+                return false;
+            }
+            
+            mostrarExito('salario');
+            return true;
+        }
+
+        function validarEmail() {
+            const valor = document.getElementById('email').value.trim();
+            
+            if (!valor) {
+                mostrarError('email', 'Este campo es requerido');
+                return false;
+            }
+            
+            if (!regexEmail.test(valor)) {
+                mostrarError('email', 'Debe ingresar un email válido');
+                return false;
+            }
+            
+            mostrarExito('email');
+            return true;
+        }
+
+        function validarSitioWeb() {
+            const valor = document.getElementById('sitioWeb').value.trim();
+            
+            if (!valor) {
+                mostrarError('sitioWeb', 'Este campo es requerido');
+                return false;
+            }
+            
+            if (!regexUrl.test(valor)) {
+                mostrarError('sitioWeb', 'Debe ingresar una URL válida (http:// o https://)');
+                return false;
+            }
+            
+            mostrarExito('sitioWeb');
+            return true;
+        }
+
+        function validarPassword() {
+            const valor = document.getElementById('password').value;
+            
+            if (!valor) {
+                mostrarError('password', 'Este campo es requerido');
+                return false;
+            }
+            
+            if (!regexPassword.test(valor)) {
+                mostrarError('password', 'Debe tener 8-12 caracteres, mayúscula, minúscula, número y carácter especial');
+                return false;
+            }
+            
+            mostrarExito('password');
+            return true;
+        }
+
+        // Event listeners para validación en tiempo real
+        document.getElementById('nombre').addEventListener('blur', () => validarNombre('nombre'));
+        document.getElementById('apellido').addEventListener('blur', () => validarNombre('apellido'));
+        document.getElementById('cedula').addEventListener('blur', validarCedula);
+        document.getElementById('telefono').addEventListener('blur', validarTelefono);
+        document.getElementById('fechaNacimiento').addEventListener('blur', validarFechaNacimiento);
+        document.getElementById('genero').addEventListener('change', validarGenero);
+        document.getElementById('direccion').addEventListener('blur', validarDireccion);
+        document.getElementById('salario').addEventListener('blur', validarSalario);
+        document.getElementById('email').addEventListener('blur', validarEmail);
+        document.getElementById('sitioWeb').addEventListener('blur', validarSitioWeb);
+        document.getElementById('password').addEventListener('blur', validarPassword);
+
+        // Validación del formulario completo
+        document.getElementById('registroForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            let formularioValido = true;
+            
+            // Validar todos los campos
+            formularioValido &= validarNombre('nombre');
+            formularioValido &= validarNombre('apellido');
+            formularioValido &= validarCedula();
+            formularioValido &= validarTelefono();
+            formularioValido &= validarFechaNacimiento();
+            formularioValido &= validarGenero();
+            formularioValido &= validarDireccion();
+            formularioValido &= validarSalario();
+            formularioValido &= validarEmail();
+            formularioValido &= validarSitioWeb();
+            formularioValido &= validarPassword();
+            
+            if (formularioValido) {
+                alert('¡Formulario enviado correctamente! Todos los campos son válidos.');
+                // Aquí podrías enviar los datos al servidor
+                console.log('Datos del formulario:', new FormData(this));
+            } else {
+                alert('Por favor, corrige los errores en el formulario.');
+            }
+        });
+
+        // Establecer fecha máxima para el campo de fecha de nacimiento
+        document.getElementById('fechaNacimiento').max = new Date().toISOString().split('T')[0];
+        document.getElementById('fechaNacimiento').min = '1900-01-01';
+    </script>
+</body>
+</html>
