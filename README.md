@@ -11,7 +11,7 @@ Este laboratorio tiene como objetivo el desarrollo de un formulario web que perm
 - JavaScript (validaciones con RegEx)
 ---
 
-![Uploading Captura de pantalla 2025-07-01 114623.png…]()
+![Formulario Web Validado](./captura_formulario.png)
 
 ---
 
