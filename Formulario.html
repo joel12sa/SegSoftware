@@ -253,267 +253,477 @@
         </form>
     </div>
 
-    <script>
-        // Expresiones regulares
-        const regexNombre = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{3,30}$/;
-        const regexCedula = /^\d{10}$/;
-        const regexRuc = /^\d{13}$/;
-        const regexTelefono = /^\d{10}$/;
-        const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const regexUrl = /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/;
-        const regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,12}$/;
-        const regexDireccion = /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s,.-]{1,20}$/;
+<script>
+    // Expresiones regulares mejoradas
+    const regexNombre = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{3,30}$/;
+    const regexCedula = /^\d{10}$/;
+    const regexRuc = /^\d{13}$/;
+    const regexTelefono = /^[0-9]{7,15}$/; // Más flexible para números internacionales
+    const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const regexUrl = /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/;
+    const regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,12}$/;
+    const regexDireccion = /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s,.-]{1,50}$/; // Aumentado a 50 caracteres
 
-        // Función para mostrar error
-        function mostrarError(campo, mensaje) {
-            const input = document.getElementById(campo);
-            const errorElement = document.getElementById(campo + 'Error');
-            const successElement = document.getElementById(campo + 'Success');
-            
-            input.classList.add('error');
-            input.classList.remove('success');
+    // Función para mostrar error mejorada
+    function mostrarError(campo, mensaje) {
+        const input = document.getElementById(campo);
+        if (!input) return;
+        
+        const errorElement = document.getElementById(`${campo}Error`);
+        const successElement = document.getElementById(`${campo}Success`);
+        
+        input.classList.add('error');
+        input.classList.remove('success');
+        if (errorElement) {
             errorElement.textContent = mensaje;
             errorElement.style.display = 'block';
+        }
+        if (successElement) {
             successElement.style.display = 'none';
         }
+    }
 
-        // Función para mostrar éxito
-        function mostrarExito(campo) {
-            const input = document.getElementById(campo);
-            const errorElement = document.getElementById(campo + 'Error');
-            const successElement = document.getElementById(campo + 'Success');
-            
-            input.classList.add('success');
-            input.classList.remove('error');
+    // Función para mostrar éxito mejorada
+    function mostrarExito(campo) {
+        const input = document.getElementById(campo);
+        if (!input) return;
+        
+        const errorElement = document.getElementById(`${campo}Error`);
+        const successElement = document.getElementById(`${campo}Success`);
+        
+        input.classList.add('success');
+        input.classList.remove('error');
+        if (errorElement) {
             errorElement.style.display = 'none';
+        }
+        if (successElement) {
             successElement.style.display = 'block';
         }
+    }
 
-        // Función para limpiar validación
-        function limpiarValidacion(campo) {
-            const input = document.getElementById(campo);
-            const errorElement = document.getElementById(campo + 'Error');
-            const successElement = document.getElementById(campo + 'Success');
-            
-            input.classList.remove('error', 'success');
-            errorElement.style.display = 'none';
-            successElement.style.display = 'none';
+    // Validaciones mejoradas con más feedback
+    function validarNombre(campo) {
+        const input = document.getElementById(campo);
+        if (!input) return false;
+        
+        const valor = input.value.trim();
+        
+        if (!valor) {
+            mostrarError(campo, 'Este campo es requerido');
+            return false;
         }
-
-        // Validaciones individuales
-        function validarNombre(campo) {
-            const valor = document.getElementById(campo).value.trim();
-            
-            if (!valor) {
-                mostrarError(campo, 'Este campo es requerido');
-                return false;
-            }
-            
-            if (!regexNombre.test(valor)) {
-                mostrarError(campo, 'Debe contener solo letras, entre 3 y 30 caracteres');
-                return false;
-            }
-            
-            mostrarExito(campo);
-            return true;
+        
+        if (!regexNombre.test(valor)) {
+            mostrarError(campo, 'Debe contener solo letras, entre 3 y 30 caracteres');
+            return false;
         }
+        
+        mostrarExito(campo);
+        return true;
+    }
 
-        function validarCedula() {
-            const valor = document.getElementById('cedula').value.trim();
-            
-            if (!valor) {
-                mostrarError('cedula', 'Este campo es requerido');
-                return false;
-            }
-            
-            if (!regexCedula.test(valor) && !regexRuc.test(valor)) {
-                mostrarError('cedula', 'Debe contener 10 dígitos (cédula) o 13 dígitos (RUC)');
-                return false;
-            }
-            
-            mostrarExito('cedula');
-            return true;
+    function validarCedula() {
+        const campo = 'cedula';
+        const input = document.getElementById(campo);
+        if (!input) return false;
+        
+        const valor = input.value.trim();
+        
+        if (!valor) {
+            mostrarError(campo, 'Este campo es requerido');
+            return false;
         }
-
-        function validarTelefono() {
-            const valor = document.getElementById('telefono').value.trim();
-            
-            if (!valor) {
-                mostrarError('telefono', 'Este campo es requerido');
-                return false;
-            }
-            
-            if (!regexTelefono.test(valor)) {
-                mostrarError('telefono', 'Debe contener exactamente 10 dígitos');
-                return false;
-            }
-            
-            mostrarExito('telefono');
-            return true;
+        
+        if (!regexCedula.test(valor) && !regexRuc.test(valor)) {
+            mostrarError(campo, 'Debe contener 10 dígitos (cédula) o 13 dígitos (RUC)');
+            return false;
         }
-
-        function validarFechaNacimiento() {
-            const valor = document.getElementById('fechaNacimiento').value;
-            
-            if (!valor) {
-                mostrarError('fechaNacimiento', 'Este campo es requerido');
-                return false;
-            }
-            
-            const fecha = new Date(valor);
-            const fechaMinima = new Date('1900-01-01');
-            const fechaMaxima = new Date();
-            
-            if (fecha < fechaMinima || fecha > fechaMaxima) {
-                mostrarError('fechaNacimiento', 'La fecha debe estar entre 01/01/1900 y hoy');
-                return false;
-            }
-            
-            mostrarExito('fechaNacimiento');
-            return true;
+        
+        // Validación adicional para cédula ecuatoriana (opcional)
+        if (regexCedula.test(valor) && !validarCedulaEcuatoriana(valor)) {
+            mostrarError(campo, 'Cédula no válida');
+            return false;
         }
+        
+        mostrarExito(campo);
+        return true;
+    }
 
-        function validarGenero() {
-            const valor = document.getElementById('genero').value;
-            
-            if (!valor) {
-                mostrarError('genero', 'Debe seleccionar una opción');
-                return false;
+    // Función opcional para validar cédula ecuatoriana
+    function validarCedulaEcuatoriana(cedula) {
+        if (cedula.length !== 10) return false;
+        
+        const digitoRegion = parseInt(cedula.substring(0, 2));
+        if (digitoRegion < 1 || digitoRegion > 24) return false;
+        
+        const ultimoDigito = parseInt(cedula.charAt(9));
+        let suma = 0;
+        
+        for (let i = 0; i < 9; i++) {
+            let digito = parseInt(cedula.charAt(i));
+            if (i % 2 === 0) {
+                digito *= 2;
+                if (digito > 9) digito -= 9;
             }
-            
-            mostrarExito('genero');
-            return true;
+            suma += digito;
         }
+        
+        const digitoVerificador = (suma % 10 === 0) ? 0 : 10 - (suma % 10);
+        return digitoVerificador === ultimoDigito;
+    }
 
-        function validarDireccion() {
-            const valor = document.getElementById('direccion').value.trim();
-            
-            if (!valor) {
-                mostrarError('direccion', 'Este campo es requerido');
-                return false;
-            }
-            
-            if (!regexDireccion.test(valor)) {
-                mostrarError('direccion', 'Máximo 20 caracteres, sin caracteres especiales peligrosos');
-                return false;
-            }
-            
-            mostrarExito('direccion');
-            return true;
+    function validarTelefono() {
+        const campo = 'telefono';
+        const input = document.getElementById(campo);
+        if (!input) return false;
+        
+        const valor = input.value.trim();
+        
+        if (!valor) {
+            mostrarError(campo, 'Este campo es requerido');
+            return false;
         }
-
-        function validarSalario() {
-            const valor = parseFloat(document.getElementById('salario').value);
-            
-            if (isNaN(valor)) {
-                mostrarError('salario', 'Este campo es requerido');
-                return false;
-            }
-            
-            if (valor < 470 || valor > 5000) {
-                mostrarError('salario', 'El salario debe estar entre $470 y $5000');
-                return false;
-            }
-            
-            mostrarExito('salario');
-            return true;
+        
+        if (!regexTelefono.test(valor)) {
+            mostrarError(campo, 'Debe contener entre 7 y 15 dígitos');
+            return false;
         }
+        
+        mostrarExito(campo);
+        return true;
+    }
 
-        function validarEmail() {
-            const valor = document.getElementById('email').value.trim();
-            
-            if (!valor) {
-                mostrarError('email', 'Este campo es requerido');
-                return false;
-            }
-            
-            if (!regexEmail.test(valor)) {
-                mostrarError('email', 'Debe ingresar un email válido');
-                return false;
-            }
-            
-            mostrarExito('email');
-            return true;
+    function validarFechaNacimiento() {
+        const campo = 'fechaNacimiento';
+        const input = document.getElementById(campo);
+        if (!input) return false;
+        
+        const valor = input.value;
+        
+        if (!valor) {
+            mostrarError(campo, 'Este campo es requerido');
+            return false;
         }
-
-        function validarSitioWeb() {
-            const valor = document.getElementById('sitioWeb').value.trim();
-            
-            if (!valor) {
-                mostrarError('sitioWeb', 'Este campo es requerido');
-                return false;
-            }
-            
-            if (!regexUrl.test(valor)) {
-                mostrarError('sitioWeb', 'Debe ingresar una URL válida (http:// o https://)');
-                return false;
-            }
-            
-            mostrarExito('sitioWeb');
-            return true;
+        
+        const fecha = new Date(valor);
+        const fechaMinima = new Date('1900-01-01');
+        const fechaMaxima = new Date();
+        
+        if (fecha < fechaMinima || fecha > fechaMaxima) {
+            mostrarError(campo, 'La fecha debe estar entre 01/01/1900 y hoy');
+            return false;
         }
-
-        function validarPassword() {
-            const valor = document.getElementById('password').value;
-            
-            if (!valor) {
-                mostrarError('password', 'Este campo es requerido');
-                return false;
-            }
-            
-            if (!regexPassword.test(valor)) {
-                mostrarError('password', 'Debe tener 8-12 caracteres, mayúscula, minúscula, número y carácter especial');
-                return false;
-            }
-            
-            mostrarExito('password');
-            return true;
+        
+        // Validar edad mínima (18 años)
+        const edadMinima = new Date();
+        edadMinima.setFullYear(edadMinima.getFullYear() - 18);
+        if (fecha > edadMinima) {
+            mostrarError(campo, 'Debes tener al menos 18 años');
+            return false;
         }
+        
+        mostrarExito(campo);
+        return true;
+    }
 
-        // Event listeners para validación en tiempo real
-        document.getElementById('nombre').addEventListener('blur', () => validarNombre('nombre'));
-        document.getElementById('apellido').addEventListener('blur', () => validarNombre('apellido'));
-        document.getElementById('cedula').addEventListener('blur', validarCedula);
-        document.getElementById('telefono').addEventListener('blur', validarTelefono);
-        document.getElementById('fechaNacimiento').addEventListener('blur', validarFechaNacimiento);
-        document.getElementById('genero').addEventListener('change', validarGenero);
-        document.getElementById('direccion').addEventListener('blur', validarDireccion);
-        document.getElementById('salario').addEventListener('blur', validarSalario);
-        document.getElementById('email').addEventListener('blur', validarEmail);
-        document.getElementById('sitioWeb').addEventListener('blur', validarSitioWeb);
-        document.getElementById('password').addEventListener('blur', validarPassword);
+    function validarGenero() {
+        const campo = 'genero';
+        const input = document.getElementById(campo);
+        if (!input) return false;
+        
+        const valor = input.value;
+        
+        if (!valor) {
+            mostrarError(campo, 'Debe seleccionar una opción');
+            return false;
+        }
+        
+        mostrarExito(campo);
+        return true;
+    }
 
-        // Validación del formulario completo
-        document.getElementById('registroForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            let formularioValido = true;
-            
-            // Validar todos los campos
-            formularioValido &= validarNombre('nombre');
-            formularioValido &= validarNombre('apellido');
-            formularioValido &= validarCedula();
-            formularioValido &= validarTelefono();
-            formularioValido &= validarFechaNacimiento();
-            formularioValido &= validarGenero();
-            formularioValido &= validarDireccion();
-            formularioValido &= validarSalario();
-            formularioValido &= validarEmail();
-            formularioValido &= validarSitioWeb();
-            formularioValido &= validarPassword();
-            
-            if (formularioValido) {
-                alert('¡Formulario enviado correctamente! Todos los campos son válidos.');
-                // Aquí podrías enviar los datos al servidor
-                console.log('Datos del formulario:', new FormData(this));
-            } else {
-                alert('Por favor, corrige los errores en el formulario.');
+    function validarDireccion() {
+        const campo = 'direccion';
+        const input = document.getElementById(campo);
+        if (!input) return false;
+        
+        const valor = input.value.trim();
+        
+        if (!valor) {
+            mostrarError(campo, 'Este campo es requerido');
+            return false;
+        }
+        
+        if (valor.length > 50) {
+            mostrarError(campo, 'Máximo 50 caracteres');
+            return false;
+        }
+        
+        if (!regexDireccion.test(valor)) {
+            mostrarError(campo, 'Caracteres especiales no permitidos');
+            return false;
+        }
+        
+        mostrarExito(campo);
+        return true;
+    }
+
+    function validarSalario() {
+        const campo = 'salario';
+        const input = document.getElementById(campo);
+        if (!input) return false;
+        
+        const valor = parseFloat(input.value);
+        
+        if (isNaN(valor)) {
+            mostrarError(campo, 'Este campo es requerido');
+            return false;
+        }
+        
+        if (valor < 470 || valor > 5000) {
+            mostrarError(campo, 'El salario debe estar entre $470 y $5000');
+            return false;
+        }
+        
+        mostrarExito(campo);
+        return true;
+    }
+
+    function validarEmail() {
+        const campo = 'email';
+        const input = document.getElementById(campo);
+        if (!input) return false;
+        
+        const valor = input.value.trim();
+        
+        if (!valor) {
+            mostrarError(campo, 'Este campo es requerido');
+            return false;
+        }
+        
+        if (!regexEmail.test(valor)) {
+            mostrarError(campo, 'Debe ingresar un email válido');
+            return false;
+        }
+        
+        // Validación adicional de dominio
+        const dominio = valor.split('@')[1];
+        if (!dominio || dominio.indexOf('.') === -1) {
+            mostrarError(campo, 'El dominio del email no es válido');
+            return false;
+        }
+        
+        mostrarExito(campo);
+        return true;
+    }
+
+    function validarSitioWeb() {
+        const campo = 'sitioWeb';
+        const input = document.getElementById(campo);
+        if (!input) return false;
+        
+        let valor = input.value.trim();
+        
+        if (!valor) {
+            mostrarError(campo, 'Este campo es requerido');
+            return false;
+        }
+        
+        // Añadir https:// si no está presente
+        if (!valor.startsWith('http://') && !valor.startsWith('https://')) {
+            valor = 'https://' + valor;
+            input.value = valor;
+        }
+        
+        if (!regexUrl.test(valor)) {
+            mostrarError(campo, 'Debe ingresar una URL válida (ej: https://ejemplo.com)');
+            return false;
+        }
+        
+        mostrarExito(campo);
+        return true;
+    }
+
+    function validarPassword() {
+        const campo = 'password';
+        const input = document.getElementById(campo);
+        if (!input) return false;
+        
+        const valor = input.value;
+        
+        if (!valor) {
+            mostrarError(campo, 'Este campo es requerido');
+            return false;
+        }
+        
+        if (valor.length < 8 || valor.length > 12) {
+            mostrarError(campo, 'La contraseña debe tener entre 8 y 12 caracteres');
+            return false;
+        }
+        
+        if (!regexPassword.test(valor)) {
+            mostrarError(campo, 'Debe incluir mayúsculas, minúsculas, números y caracteres especiales');
+            return false;
+        }
+        
+        mostrarExito(campo);
+        return true;
+    }
+
+    // Configurar eventos de validación
+    function configurarValidaciones() {
+        const campos = {
+            'nombre': validarNombre,
+            'apellido': validarNombre,
+            'cedula': validarCedula,
+            'telefono': validarTelefono,
+            'fechaNacimiento': validarFechaNacimiento,
+            'genero': validarGenero,
+            'direccion': validarDireccion,
+            'salario': validarSalario,
+            'email': validarEmail,
+            'sitioWeb': validarSitioWeb,
+            'password': validarPassword
+        };
+
+        Object.entries(campos).forEach(([id, validacion]) => {
+            const elemento = document.getElementById(id);
+            if (elemento) {
+                if (id === 'genero') {
+                    elemento.addEventListener('change', validacion);
+                } else {
+                    elemento.addEventListener('blur', validacion);
+                    // Validación mientras escribe para algunos campos
+                    if (id === 'password' || id === 'email') {
+                        elemento.addEventListener('input', validacion);
+                    }
+                }
+            }
+        });
+    }
+
+    // Manejar el envío del formulario
+    async function manejarEnvioFormulario(e) {
+        e.preventDefault();
+
+        const campos = [
+            { id: 'nombre', validacion: () => validarNombre('nombre') },
+            { id: 'apellido', validacion: () => validarNombre('apellido') },
+            { id: 'cedula', validacion: validarCedula },
+            { id: 'telefono', validacion: validarTelefono },
+            { id: 'fechaNacimiento', validacion: validarFechaNacimiento },
+            { id: 'genero', validacion: validarGenero },
+            { id: 'direccion', validacion: validarDireccion },
+            { id: 'salario', validacion: validarSalario },
+            { id: 'email', validacion: validarEmail },
+            { id: 'sitioWeb', validacion: validarSitioWeb },
+            { id: 'password', validacion: validarPassword }
+        ];
+
+        let formularioValido = true;
+        
+        // Ejecutar todas las validaciones
+        campos.forEach(({ id, validacion }) => {
+            const valido = validacion();
+            if (!valido) {
+                formularioValido = false;
+                const input = document.getElementById(id);
+                if (input) input.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         });
 
-        // Establecer fecha máxima para el campo de fecha de nacimiento
-        document.getElementById('fechaNacimiento').max = new Date().toISOString().split('T')[0];
-        document.getElementById('fechaNacimiento').min = '1900-01-01';
-    </script>
+        if (!formularioValido) {
+            alert('Por favor, complete correctamente todos los campos requeridos.');
+            return;
+        }
+
+        // Preparar datos para enviar
+        const datosUsuario = {
+            nombre: document.getElementById('nombre').value.trim(),
+            apellido: document.getElementById('apellido').value.trim(),
+            cedula: document.getElementById('cedula').value.trim(),
+            telefono: document.getElementById('telefono').value.trim(),
+            fecha_nacimiento: document.getElementById('fechaNacimiento').value,
+            genero: document.getElementById('genero').value,
+            direccion: document.getElementById('direccion').value.trim(),
+            salario: parseFloat(document.getElementById('salario').value),
+            email: document.getElementById('email').value.trim(),
+            sitio_web: document.getElementById('sitioWeb').value.trim(),
+            password: document.getElementById('password').value
+        };
+
+        try {
+            const response = await fetch('http://localhost:8002/api/registro/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datosUsuario)
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert('¡Registro exitoso!');
+                document.getElementById('registroForm').reset();
+                resetearValidaciones();
+            } else if (response.status === 422) {
+                manejarErroresValidacion(data);
+            } else {
+                throw new Error(data.message || 'Error en el servidor');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert(`Error al registrar: ${error.message}`);
+        }
+    }
+
+    function resetearValidaciones() {
+        document.querySelectorAll('input, select').forEach(element => {
+            element.classList.remove('success', 'error');
+            const id = element.id;
+            const errorElement = document.getElementById(`${id}Error`);
+            const successElement = document.getElementById(`${id}Success`);
+            if (errorElement) errorElement.style.display = 'none';
+            if (successElement) successElement.style.display = 'none';
+        });
+    }
+
+    function manejarErroresValidacion(errorData) {
+        if (errorData.detail && Array.isArray(errorData.detail)) {
+            errorData.detail.forEach(error => {
+                const campo = error.loc && error.loc[1] ? error.loc[1] : null;
+                const mensaje = error.msg || 'Error de validación';
+                
+                if (campo) {
+                    mostrarError(campo, mensaje);
+                    const input = document.getElementById(campo);
+                    if (input) input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            });
+            alert('Por favor corrija los errores indicados en el formulario.');
+        } else {
+            alert('Error en el servidor: ' + (errorData.message || 'Datos inválidos'));
+        }
+    }
+
+    // Inicialización cuando el DOM esté listo
+    document.addEventListener('DOMContentLoaded', function() {
+        configurarValidaciones();
+        
+        const formulario = document.getElementById('registroForm');
+        if (formulario) {
+            formulario.addEventListener('submit', manejarEnvioFormulario);
+        }
+        
+        // Establecer límites para fecha de nacimiento
+        const fechaNacimiento = document.getElementById('fechaNacimiento');
+        if (fechaNacimiento) {
+            const hoy = new Date();
+            fechaNacimiento.max = hoy.toISOString().split('T')[0];
+            fechaNacimiento.min = '1900-01-01';
+        }
+    });
+</script>
 </body>
 </html>

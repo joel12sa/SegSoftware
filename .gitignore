@@ -1,0 +1,37 @@
+# Entornos virtuales de Python
+.venv/
+venv/
+
+# Archivos de caché de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Variables de entorno
+.env
+*.env
+
+# Docker
+docker-compose.override.yml
+
+# Archivos de configuración de IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Archivos de base de datos local
+*.sqlite
+*.db
+
+# Archivos generados por el sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de logs y temporales
+*.log
+*.tmp
+*.temp
+
+# Archivos de dependencias (pueden ser regenerados)
+requirements.txt
